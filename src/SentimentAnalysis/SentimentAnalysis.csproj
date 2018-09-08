@@ -9,4 +9,13 @@
     <PackageReference Include="Microsoft.ML" Version="0.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="data\wikipedia-detox-250-line-data.tsv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="data\wikipedia-detox-250-line-test.tsv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
