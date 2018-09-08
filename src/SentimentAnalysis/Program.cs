@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Microsoft.ML;
+using Microsoft.ML.Data;
+using Microsoft.ML.Trainers;
+using Microsoft.ML.Transforms;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -12,7 +16,23 @@ namespace SentimentAnalysis
 
         static async Task Main(string[] args)
         {
+            var model = await Train();
+        }
 
+        public static async Task<PredictionModel<SentimentData, SentimentPrediction>> Train()
+        {
+            var pipeline = new LearningPipeline();
+
+            pipeline.Add(new TextLoader(_dataPath).CreateFrom<SentimentData>());
+            pipeline.Add(new TextFeaturizer("Features", "SentimentText"));
+            pipeline.Add(new FastTreeBinaryClassifier() { NumLeaves = 5, NumTrees = 5, MinDocumentsInLeafs = 2 });
+
+            PredictionModel<SentimentData, SentimentPrediction> model = 
+                pipeline.Train<SentimentData, SentimentPrediction>();
+
+            await model.WriteAsync(_modelpath);
+
+            return model;
         }
     }
 }
